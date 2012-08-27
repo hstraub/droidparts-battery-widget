@@ -33,14 +33,14 @@ public class BatteryWidgetProvider extends AppWidgetProvider {
 	private static final String BATTERY_SERVICE_ACTION = "org.droidparts.battery_widget.BatteryService";
 	
 	public void onEnabled(Context context) {
-		Log.d(TAG, "provider.enabled");
+		Log.d(TAG, "BatteryWidgetProvider::onEnabled");
 		
 		Intent intent = new Intent(BATTERY_SERVICE_ACTION);
 		context.startService(intent);
 	}
 
 	public void onDisabled(Context context) {
-		Log.d(TAG, "provider.disabled");
+		Log.d(TAG, "BatteryWidgetProvider::onDisabled");
 		
 		// stop service
 		Intent intent = new Intent(BATTERY_SERVICE_ACTION);
@@ -52,7 +52,7 @@ public class BatteryWidgetProvider extends AppWidgetProvider {
 	}
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		Log.d(TAG, "provider.update");
+		Log.d(TAG, "BatteryWidgetProvider::onUpdate");
 		BatteryService.requestWidgetUpdate(context);
 	}
 }

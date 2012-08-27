@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010 Sergej Shafarenka, beworx.com
+ * Portions Copyright (C) 2012 Herbert Straub, herbert@linuxhacker.at
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,26 +21,28 @@ import static org.droidparts.battery_widget.BatteryWidget.TAG;
 import static org.droidparts.battery_widget.BatteryWidgetProvider.EXT_UPDATE_WIDGETS;
 
 import java.lang.reflect.Field;
-
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+import at.linuxhacker.battery.BatteryStatusEvent;
+import at.linuxhacker.battery.EventsTracer;
 
 public class BatteryService extends Service {
-
 	// cached values
 	int mBatteryChargeLevel = -1; 
 	boolean mChargerConnected;
+	boolean mScreenOn = false;
+	EventsTracer eventsTracer = null;
 
 	private ScreenStateService mScreenStateReceiver;
-
 
 	private class BatteryStateReceiver extends BroadcastReceiver {
 		@Override
@@ -50,19 +53,25 @@ public class BatteryService extends Service {
 				
 				// see constants in BatteryManager
 				
-				int rawlevel = intent.getIntExtra("level", -1);
-				int scale = intent.getIntExtra("scale", -1);
+				int rawlevel = intent.getIntExtra( BatteryManager.EXTRA_LEVEL, -1 );
+				int scale = intent.getIntExtra( BatteryManager.EXTRA_SCALE, -1);
+				int plugged = intent.getIntExtra( BatteryManager.EXTRA_PLUGGED, 0 );
+				int status = intent.getIntExtra( BatteryManager.EXTRA_STATUS, -1 );
 				int level = 0;
 				if (rawlevel >= 0 && scale > 0) {
 					level = (rawlevel * 100) / scale;
 				}
 				mBatteryChargeLevel = level;
-				mChargerConnected = intent.getIntExtra("plugged", 0) > 0 && level < 100 /* not charging if 100%*/;
+				mChargerConnected = plugged > 0 && level < 100 /* not charging if 100%*/;
+	
+				BatteryStatusEvent batteryStatus = new BatteryStatusEvent( level, status, plugged, BatteryService.this.mScreenOn );
+				BatteryService.this.eventsTracer.addBatteryChangedEvent( batteryStatus );
 				
-				Log.d(TAG, "battery state: level=" + level + ", charging=" + mChargerConnected);
 			}
 			
-			BatteryWidget.updateWidgets(context, mBatteryChargeLevel, mChargerConnected);
+			if ( BatteryService.isScreenOn( context ) == true ) {
+				BatteryWidget.updateWidgets(context, mBatteryChargeLevel, mChargerConnected);
+			}
 		}
 	}
 
@@ -74,10 +83,13 @@ public class BatteryService extends Service {
 			String action = intent.getAction();
 			if (Intent.ACTION_SCREEN_ON.equals(action)) {
 				Log.d(TAG, "screen is ON");
-				registerBatteryReceiver(true, context);
+				BatteryService.this.mScreenOn = true; // FIXME
+				BatteryService.this.eventsTracer.addScreenOnEvent( );
+				BatteryWidget.updateWidgets(context, mBatteryChargeLevel, mChargerConnected);
 			} else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-				registerBatteryReceiver(false, context);
 				Log.d(TAG, "screen is OFF");
+				BatteryService.this.mScreenOn = false; // FIXME: was ist damit
+				BatteryService.this.eventsTracer.addScreenOffEvent( );
 			}
 		}
 
@@ -102,20 +114,25 @@ public class BatteryService extends Service {
 				filter.addAction(Intent.ACTION_SCREEN_ON);
 				filter.addAction(Intent.ACTION_SCREEN_OFF);
 				context.registerReceiver(this, filter);
+				registerBatteryReceiver(true, context);
 			} else {
 				registerBatteryReceiver(false, context);
 				context.unregisterReceiver(this);
 			}
+			
+			Log.d( TAG, "registerScreenReceiver " + ( register ? "ON" : "OFF (sleeping)" ) );
 		}
 	}
 
 	public void onStart(Intent intent, int startId) {
-
+		this.eventsTracer = new EventsTracer( this );
+		
 		if (mScreenStateReceiver == null) {
 			mScreenStateReceiver = new ScreenStateService();
 
+
 			if (isScreenOn(this)) {
-				mScreenStateReceiver.registerBatteryReceiver(true, this);
+				this.mScreenOn = BatteryService.isScreenOn( this );
 			}
 
 			mScreenStateReceiver.registerScreenReceiver(true, this);
@@ -126,11 +143,9 @@ public class BatteryService extends Service {
 		if (ext != null && ext.getBoolean(EXT_UPDATE_WIDGETS, false)) {
 			BatteryWidget.updateWidgets(this, mBatteryChargeLevel, mChargerConnected);
 		}
-
 	}
 
 	public void onDestroy() {
-
 		if (mScreenStateReceiver != null) {
 			mScreenStateReceiver.registerScreenReceiver(false, this);
 			mScreenStateReceiver = null;

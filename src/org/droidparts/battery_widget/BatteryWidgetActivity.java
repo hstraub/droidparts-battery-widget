@@ -31,6 +31,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -50,6 +51,7 @@ public class BatteryWidgetActivity extends Activity implements OnClickListener,
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d( BatteryWidget.TAG, "BatteryWidgetActivity::onCreate" );
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.configuration);
 
@@ -62,11 +64,13 @@ public class BatteryWidgetActivity extends Activity implements OnClickListener,
 
 	protected void onPause() {
 		super.onPause();
+		Log.d( BatteryWidget.TAG, "BatteryWidgetActivity::onPause" );
 		schedulePreviewUpdate(false);
 	}
 	
 	protected void onResume() {
 		super.onResume();
+		Log.d( BatteryWidget.TAG, "BatteryWidgetActivity::onResume" );
 		
 		// update widgets
 		BatteryService.requestWidgetUpdate(this);
@@ -159,6 +163,7 @@ public class BatteryWidgetActivity extends Activity implements OnClickListener,
 	}
 
 	public void run() {
+		Log.d( BatteryWidget.TAG, "BatteryWidgetActivity::run" );
 		if (++mLevel == LEVELS.length) {
 			mLevel = 0;
 		}
