@@ -23,6 +23,7 @@ public class BatteryStatusEvent {
 	private int plugged;
 	private boolean screenOn;
 	private long timestamp; // Unix Timestamp in Seconds
+	private int minutesToFull = -1; 
 
 	public int getLevel( ) {
 		return level;
@@ -52,6 +53,14 @@ public class BatteryStatusEvent {
 		this.status = status;
 		this.plugged = plugged;
 		this.screenOn = screenOn;
+	}
+
+	public int getMinutesToFull( ) {
+		return minutesToFull;
+	}
+
+	public void setMinutesToFull( int minutesToFull ) {
+		this.minutesToFull = minutesToFull;
 	}
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package at.linuxhacker.battery;
+package at.linuxhacker.notifications;
 
 import org.droidparts.battery_widget.BatteryWidget;
 
@@ -28,7 +28,7 @@ import android.util.Log;
 import android.view.View;
 
 
-public class BatteryInformationView extends View {
+public class NotificationScreenOverlayView extends View {
     private Paint mLoadPaint;
     private int mNeededWidth = 300;
     private int mNeededHeight = 300;
@@ -47,7 +47,7 @@ public class BatteryInformationView extends View {
     	}
     };
 
-    public BatteryInformationView(Context context) {
+    public NotificationScreenOverlayView(Context context) {
         super(context);
         //Toast.makeText(getContext(),"HUDView", Toast.LENGTH_LONG).show();
         //setPadding( 4, 4, 4, 4 );
