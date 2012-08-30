@@ -83,6 +83,16 @@ public class EventFilter {
 		}
 		this.notificationDistributor.displayTextOnScreenOverlay( text );
 	}
+	
+	public void processScreenOnEventPluggedInState( int minutesToFull ) {
+		String text = "Ladezeit " + minutesToFull + " Minuten";
+		
+		if ( ! this.isSpeakerSilentInterval( ) ) {
+			this.notificationDistributor.speakText( text );
+			this.markSpokenTimestamp( );
+		}
+		this.notificationDistributor.displayTextOnScreenOverlay( text );
+	}
 
 	private void markSpokenTimestamp( ) {
 		this.lastSpokenTimestamp = System.currentTimeMillis( ) / 1000;

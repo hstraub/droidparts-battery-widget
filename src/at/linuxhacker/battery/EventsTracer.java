@@ -19,23 +19,14 @@ package at.linuxhacker.battery;
 import static org.droidparts.battery_widget.BatteryWidget.TAG;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.os.BatteryManager;
-import android.os.CountDownTimer;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.WindowManager;
-import android.widget.Toast;
 import at.linuxhacker.notifications.NotificationScreenOverlayView;
 
 public class EventsTracer  {
 
-	private Context context;
-	private static final long SILENT_SECONDS_AFTER_SCREEN_OFF = 1800;
 	private BatteryStatusEvent actualBatteryStatus = null;
 	private BatteryStatusEvent previousBatteryStatus = null;
 	private ChargeRate chargeRate;
@@ -50,8 +41,6 @@ public class EventsTracer  {
 	private EventFilter eventFilter = null;
 
 	public EventsTracer(Context context) {
-		this.context = context;
-		
 		this.eventFilter = new EventFilter( context );
 	}
 
@@ -82,35 +71,17 @@ public class EventsTracer  {
 			// yes, actualBatteryStatus could be null, after startup the widget
 			// and the service. We have to check, if we have the necessary data
 
-			this.eventFilter.processScreenOnEvent( this.actualBatteryStatus );
+			if ( this.pluggedState ) {
+				this.eventFilter.processScreenOnEventPluggedInState( this.calculateMinutesToFull( ) );
+			} else {
+				this.eventFilter.processScreenOnEvent( this.actualBatteryStatus );
+			}
 		}
 	}
 
 	public void addScreenOffEvent( ) {
 		this.screenStatus.add( new ScreenStatusEvent( System
 				.currentTimeMillis( ) / 1000, false ) );
-	}
-
-	private long findLastScreenOffTimestamp( ) {
-		long timestamp = 0;
-		int j = 0;
-		for ( int i = this.screenStatus.size( ) - 1; i >= 0; i-- ) {
-			if ( !this.screenStatus.get( i ).isScreenOnFlag( ) ) {
-				Log.d( TAG,
-						"ja(" + i + ") timestamp="
-								+ this.screenStatus.get( i ).getTimestamp( )
-								+ " und j=" + j );
-				// Event ordering is essential!! FIXME: this is not perfect
-				if ( j < 0 ) {
-					j++;
-				} else {
-					timestamp = this.screenStatus.get( i ).getTimestamp( );
-					break;
-				}
-			}
-		}
-		Log.d( TAG, "return Timestamp=" + timestamp );
-		return timestamp;
 	}
 
 	private void calculateChargeRate( ) {
@@ -160,23 +131,20 @@ public class EventsTracer  {
 	}
 
 	public void processBatteryStatusUpdate( ) {
-		int minutesToFull = 0;
-
-		if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_AC ) {
-			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
-					.getLevel( ) ) / 1.0 );
-		} else if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_USB ) {
-			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
-					.getLevel( ) ) / 0.5 );
+		// We are in plugged state
+		if ( this.actualBatteryStatus.getPlugged( ) > 0 ) {
+			this.pluggedState = true;
+		} else {
+			this.pluggedState = false;
 		}
-
+		
 		// Check for plugged state change on the rising edge
 		// Set only Flag - notifications on ScreenOnEvent
 		if ( ( this.previousBatteryStatus == null || this.previousBatteryStatus
 				.getPlugged( ) == 0 )
 				&& this.actualBatteryStatus.getPlugged( ) > 0 ) {
 
-			this.actualBatteryStatus.setMinutesToFull( minutesToFull );
+			this.actualBatteryStatus.setMinutesToFull( this.calculateMinutesToFull( ) );
 			this.eventFilter.processPowerPluggedInEvent( this.actualBatteryStatus );
 		}
 
@@ -187,15 +155,21 @@ public class EventsTracer  {
 			
 			this.eventFilter.processPowerPluggedOutEvent( this.actualBatteryStatus );
 		}
-
-		// We are in plugged state
-		if ( this.actualBatteryStatus.getPlugged( ) > 0 ) {
-			this.pluggedState = true;
-		} else {
-			this.pluggedState = false;
-		}
 	}
 	
+	private int calculateMinutesToFull( ) {
+		int minutesToFull = -1;
+		
+		if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_AC ) {
+			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
+					.getLevel( ) ) / 1.0 );
+		} else if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_USB ) {
+			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
+					.getLevel( ) ) / 0.5 );
+		}
+		
+		return minutesToFull;
+	}
 }
 
 

@@ -1,11 +1,16 @@
-Package at.linuxhacker.notifications
+* Package at.linuxhacker.battery
+
+- screenStatusArray Memory Cleanup
+- implementing ArrayList<BatteryStatus> batteryStatusList
+
+* Package at.linuxhacker.notifications
 
 Implementation of:
 
 - NotificationToast
 - NotificationSystemNotification
 
-Multilanguage Support for Notifications:
+* Multilanguage Support for Notifications:
 
 - Screen Text
 - TextToSpeech Text
