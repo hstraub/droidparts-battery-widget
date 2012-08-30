@@ -1,12 +1,14 @@
 package at.linuxhacker.notifications;
 
 import org.droidparts.battery_widget.BatteryStatisticActivity;
+import org.droidparts.battery_widget.BatteryWidget;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class NotificationSystemNotification {
 	private Context context = null;
@@ -38,7 +40,8 @@ public class NotificationSystemNotification {
 		notification.setLatestEventInfo( context.getApplicationContext( ), contentTitle, contentText,
 				contentIntent );
 		
-		notificationManager.notify( 1, notification );
+		notificationManager.notify( 3, notification );
+		Log.d ( BatteryWidget.TAG, "notification sent" );
 
 	}
 }

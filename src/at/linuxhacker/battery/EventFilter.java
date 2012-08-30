@@ -16,7 +16,11 @@
 
 package at.linuxhacker.battery;
 
+import org.droidparts.battery_widget.BatteryWidget;
+import org.droidparts.battery_widget.BatteryWidgetActivity;
+
 import android.content.Context;
+import android.util.Log;
 import at.linuxhacker.notifications.NotificationDistributor;
 
 public class EventFilter {
@@ -63,6 +67,7 @@ public class EventFilter {
 		String text = "Ladevorgang abgeschlossen";
 
 		this.speakTextUnfiltered( text );
+		this.notificationDistributor.displaySystemNotification( text );
 	}
 
 	public void processScreenOnEvent( BatteryStatusEvent batteryStatusEvent ) {
@@ -81,7 +86,7 @@ public class EventFilter {
 
 		this.speakTextFilterd( text );
 		this.notificationDistributor.displayTextOnScreenOverlay( text );
-		this.notificationDistributor.displaySystemNotification( text );
+
 	}
 
 	public void processScreenOnEventPluggedInState( int minutesToFull ) {
@@ -89,6 +94,8 @@ public class EventFilter {
 
 		this.speakTextFilterd( text );
 		this.notificationDistributor.displayTextOnScreenOverlay( text );
+		Log.d( BatteryWidget.TAG, "jetzt rufe ich das scheissding auf" );
+		this.notificationDistributor.displaySystemNotification( text );
 	}
 
 	private void speakTextFilterd( String text ) {
