@@ -81,6 +81,7 @@ public class EventFilter {
 
 		this.speakTextFilterd( text );
 		this.notificationDistributor.displayTextOnScreenOverlay( text );
+		this.notificationDistributor.displaySystemNotification( text );
 	}
 
 	public void processScreenOnEventPluggedInState( int minutesToFull ) {

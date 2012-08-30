@@ -8,14 +8,14 @@
 Implementation of:
 
 - NotificationToast
-- NotificationSystemNotification
+- NotificationSystemNotification ( test-implemention done )
 
 * Multilanguage Support for Notifications:
 
 - Screen Text
 - TextToSpeech Text
 
-possible Solution: Textpart suppsitution. Example:
+possible Solution: Textpart substitution. Example:
 
 - Ladestand: CHARGELEVEL%
 - Charge Level: CHARGELEVEL%

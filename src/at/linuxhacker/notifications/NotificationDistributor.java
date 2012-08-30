@@ -22,12 +22,14 @@ public class NotificationDistributor {
 	private Context context = null;
 	private NotificationTextToSpeech notificationTextToSpeech = null;
 	private NotificationScreenOverlay notificationScreenOverlay = null;
+	private NotificationSystemNotification notivicationSystemNotification = null;
 	
 	public NotificationDistributor(Context context) {
 		this.context = context;
 		
 		this.notificationTextToSpeech = new NotificationTextToSpeech( this.context );
 		this.notificationScreenOverlay = new NotificationScreenOverlay( this.context );
+		this.notivicationSystemNotification = new NotificationSystemNotification( context );
 	}
 	
 	public void speakText( String textToSpeak ) {
@@ -36,5 +38,9 @@ public class NotificationDistributor {
 	
 	public void displayTextOnScreenOverlay( String textToDisplay ) {
 		this.notificationScreenOverlay.displayText( textToDisplay );
+	}
+	
+	public void displaySystemNotification( String text ) {
+		this.notivicationSystemNotification.displayNotification( text );
 	}
 }
