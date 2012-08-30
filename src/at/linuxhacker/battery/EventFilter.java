@@ -20,7 +20,7 @@ import android.content.Context;
 import at.linuxhacker.notifications.NotificationDistributor;
 
 public class EventFilter {
-	private static final long SPEAKER_SILENT_INTERVALL = 1800;
+	private static final long SPEAKER_SILENT_INTERVALL = 7200;
 	
 	private Context context = null;
 	private NotificationDistributor notificationDistributor = null;
@@ -58,6 +58,13 @@ public class EventFilter {
 			this.notificationDistributor.speakText( text );
 			this.notificationDistributor.displayTextOnScreenOverlay( text );
 		}
+		this.markSpokenTimestamp( );
+	}
+	
+	public void processBatteryFullEvent( BatteryStatusEvent batteryStatusEvent ) {
+		String text = "Ladevorgang abgeschlossen";
+		
+		this.notificationDistributor.speakText( text );
 		this.markSpokenTimestamp( );
 	}
 	

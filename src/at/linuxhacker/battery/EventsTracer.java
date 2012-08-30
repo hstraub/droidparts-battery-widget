@@ -25,7 +25,7 @@ import android.os.BatteryManager;
 import android.util.Log;
 import at.linuxhacker.notifications.NotificationScreenOverlayView;
 
-public class EventsTracer  {
+public class EventsTracer {
 
 	private BatteryStatusEvent actualBatteryStatus = null;
 	private BatteryStatusEvent previousBatteryStatus = null;
@@ -72,9 +72,11 @@ public class EventsTracer  {
 			// and the service. We have to check, if we have the necessary data
 
 			if ( this.pluggedState ) {
-				this.eventFilter.processScreenOnEventPluggedInState( this.calculateMinutesToFull( ) );
+				this.eventFilter.processScreenOnEventPluggedInState( this
+						.calculateMinutesToFull( ) );
 			} else {
-				this.eventFilter.processScreenOnEvent( this.actualBatteryStatus );
+				this.eventFilter
+						.processScreenOnEvent( this.actualBatteryStatus );
 			}
 		}
 	}
@@ -131,6 +133,10 @@ public class EventsTracer  {
 	}
 
 	public void processBatteryStatusUpdate( ) {
+		if ( this.actualBatteryStatus == null || this.previousBatteryStatus == null) {
+			return;
+		}
+		
 		// We are in plugged state
 		if ( this.actualBatteryStatus.getPlugged( ) > 0 ) {
 			this.pluggedState = true;
@@ -140,36 +146,35 @@ public class EventsTracer  {
 		
 		// Check for plugged state change on the rising edge
 		// Set only Flag - notifications on ScreenOnEvent
-		if ( ( this.previousBatteryStatus == null || this.previousBatteryStatus
-				.getPlugged( ) == 0 )
+		if ( this.previousBatteryStatus.getPlugged( ) == 0
 				&& this.actualBatteryStatus.getPlugged( ) > 0 ) {
-
 			this.actualBatteryStatus.setMinutesToFull( this.calculateMinutesToFull( ) );
 			this.eventFilter.processPowerPluggedInEvent( this.actualBatteryStatus );
 		}
 
 		// Check for unplugged state change on the falling edge
-		if ( ( this.previousBatteryStatus == null || this.previousBatteryStatus
-				.getPlugged( ) > 0 )
+		if ( this.previousBatteryStatus.getPlugged( ) > 0
 				&& this.actualBatteryStatus.getPlugged( ) == 0 ) {
-			
 			this.eventFilter.processPowerPluggedOutEvent( this.actualBatteryStatus );
 		}
+		
+		// Check battery full state
+		if( this.actualBatteryStatus.getLevel( ) == 100 && this.previousBatteryStatus.getLevel( ) < 100 ) {
+			this.eventFilter.processBatteryFullEvent( this.actualBatteryStatus );
+		}
 	}
-	
+
 	private int calculateMinutesToFull( ) {
 		int minutesToFull = -1;
-		
+
 		if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_AC ) {
 			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
-					.getLevel( ) ) / 1.0 );
+					.getLevel( ) ) / 0.8 );
 		} else if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_USB ) {
 			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
-					.getLevel( ) ) / 0.5 );
+					.getLevel( ) ) / 0.27 );
 		}
-		
+
 		return minutesToFull;
 	}
 }
-
-
