@@ -1,0 +1,23 @@
+Package at.linuxhacker.notifications
+
+Implementation of:
+
+- NotificationToast
+- NotificationSystemNotification
+
+Multilanguage Support for Notifications:
+
+- Screen Text
+- TextToSpeech Text
+
+possible Solution: Textpart suppsitution. Example:
+
+- Ladestand: CHARGELEVEL%
+- Charge Level: CHARGELEVEL%
+
+- Ladestand: 78%
+- Charge Level: 78%
+
+Possible Variables:
+- CHARGELEVEL
+- MINUTES_TO_FULL
