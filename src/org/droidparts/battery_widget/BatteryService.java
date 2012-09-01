@@ -34,6 +34,7 @@ import android.os.PowerManager;
 import android.util.Log;
 import at.linuxhacker.battery.BatteryStatusEvent;
 import at.linuxhacker.battery.EventsTracer;
+import at.linuxhacker.battery.LocalStorage;
 
 public class BatteryService extends Service {
 	// cached values
@@ -41,6 +42,7 @@ public class BatteryService extends Service {
 	boolean mChargerConnected;
 	boolean mScreenOn = false;
 	EventsTracer eventsTracer = null;
+	LocalStorage localStorage = new LocalStorage( );
 
 	private ScreenStateService mScreenStateReceiver;
 
@@ -65,7 +67,11 @@ public class BatteryService extends Service {
 				mChargerConnected = plugged > 0 && level < 100 /* not charging if 100%*/;
 	
 				BatteryStatusEvent batteryStatus = new BatteryStatusEvent( level, status, plugged, BatteryService.this.mScreenOn );
-				BatteryService.this.eventsTracer.addBatteryChangedEvent( batteryStatus );
+				try {
+					BatteryService.this.eventsTracer.addBatteryChangedEvent( batteryStatus );
+				} catch ( Exception e ) {
+					localStorage.writeExceptionLog( e );
+				}
 				
 			}
 			
@@ -81,15 +87,24 @@ public class BatteryService extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
+
 			if (Intent.ACTION_SCREEN_ON.equals(action)) {
 				Log.d(TAG, "screen is ON");
 				BatteryService.this.mScreenOn = true; // FIXME
-				BatteryService.this.eventsTracer.addScreenOnEvent( );
+				try {
+					BatteryService.this.eventsTracer.addScreenOnEvent( );
+				} catch ( Exception e ) {
+					localStorage.writeExceptionLog( e );
+				}
 				BatteryWidget.updateWidgets(context, mBatteryChargeLevel, mChargerConnected);
 			} else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
 				Log.d(TAG, "screen is OFF");
 				BatteryService.this.mScreenOn = false; // FIXME: was ist damit
-				BatteryService.this.eventsTracer.addScreenOffEvent( );
+				try {
+					BatteryService.this.eventsTracer.addScreenOffEvent( );
+				} catch ( Exception e ) {
+					localStorage.writeExceptionLog( e );
+				}
 			}
 		}
 
