@@ -140,6 +140,13 @@ public class BatteryService extends Service {
 	}
 
 	@Override
+	public void onCreate( ) {
+		Log.d( TAG, "BatteryService::onCreate" );
+		
+		super.onCreate( );
+	}
+
+	@Override
 	public int onStartCommand( Intent intent, int flags, int startId ) {
 		Log.d( TAG, "BatteryService::onStartCommand" );
 		
@@ -158,9 +165,14 @@ public class BatteryService extends Service {
 			mScreenStateReceiver.registerScreenReceiver(true, this);
 		}
 
-		Bundle ext = intent.getExtras();
-		if (ext != null && ext.getBoolean(EXT_UPDATE_WIDGETS, false)) {
-			BatteryWidget.updateWidgets(this, mBatteryChargeLevel, mChargerConnected);
+		if ( intent != null ) {
+			// FIXME: restart situation with START_STICKY
+			// http://stackoverflow.com/questions/3963135/onstartcommand-after-service-process-is-killed-when-started-with-start-sticky
+			Bundle ext = intent.getExtras( );
+			if ( ext != null && ext.getBoolean( EXT_UPDATE_WIDGETS, false ) ) {
+				BatteryWidget.updateWidgets( this, mBatteryChargeLevel,
+						mChargerConnected );
+			}
 		}
 		
 		return START_STICKY;
