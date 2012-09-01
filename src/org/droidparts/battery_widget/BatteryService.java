@@ -124,9 +124,13 @@ public class BatteryService extends Service {
 		}
 	}
 
-	// FIXME: onStart is deprecated -> implement onStartCommand
-	public void onStart(Intent intent, int startId) {
-		this.eventsTracer = new EventsTracer( this );
+	@Override
+	public int onStartCommand( Intent intent, int flags, int startId ) {
+		Log.d( TAG, "BatteryService::onStartCommand" );
+		
+		if ( this.eventsTracer == null ) {
+			this.eventsTracer = new EventsTracer( this );
+		}
 		
 		if (mScreenStateReceiver == null) {
 			mScreenStateReceiver = new ScreenStateService();
@@ -137,13 +141,14 @@ public class BatteryService extends Service {
 			}
 
 			mScreenStateReceiver.registerScreenReceiver(true, this);
-			Log.d(TAG, "started");
 		}
 
 		Bundle ext = intent.getExtras();
 		if (ext != null && ext.getBoolean(EXT_UPDATE_WIDGETS, false)) {
 			BatteryWidget.updateWidgets(this, mBatteryChargeLevel, mChargerConnected);
 		}
+		
+		return START_STICKY;
 	}
 
 	public void onDestroy() {

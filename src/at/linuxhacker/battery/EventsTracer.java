@@ -44,7 +44,7 @@ public class EventsTracer {
 
 	public EventsTracer(Context context) {
 		this.eventFilter = new EventFilter( context );
-		Log.d( BatteryWidget.TAG, "EventsTracer::Constructor" );ser
+		Log.d( BatteryWidget.TAG, "EventsTracer::Constructor" );
 	}
 
 	public void addBatteryChangedEvent( BatteryStatusEvent batteryStatus ) {
