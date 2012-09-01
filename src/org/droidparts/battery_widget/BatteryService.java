@@ -124,6 +124,7 @@ public class BatteryService extends Service {
 		}
 	}
 
+	// FIXME: onStart is deprecated -> implement onStartCommand
 	public void onStart(Intent intent, int startId) {
 		this.eventsTracer = new EventsTracer( this );
 		

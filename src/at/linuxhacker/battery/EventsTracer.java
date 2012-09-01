@@ -20,6 +20,8 @@ import static org.droidparts.battery_widget.BatteryWidget.TAG;
 
 import java.util.ArrayList;
 
+import org.droidparts.battery_widget.BatteryWidget;
+
 import android.content.Context;
 import android.os.BatteryManager;
 import android.util.Log;
@@ -42,6 +44,7 @@ public class EventsTracer {
 
 	public EventsTracer(Context context) {
 		this.eventFilter = new EventFilter( context );
+		Log.d( BatteryWidget.TAG, "EventsTracer::Constructor" );ser
 	}
 
 	public void addBatteryChangedEvent( BatteryStatusEvent batteryStatus ) {

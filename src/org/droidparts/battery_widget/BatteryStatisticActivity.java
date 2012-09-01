@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -26,7 +27,15 @@ public class BatteryStatisticActivity extends Activity {
 		} else {
 			Log.d( BatteryWidget.TAG, "Dreck ist null!!" );
 		}
-		
 	}
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        //View addView = getLayoutInflater( ).inflate( R.layout.mail_test, null );
+        //getActionBar( ).setCustomView( addView );
+        //getActionBar( ).setDisplayOptions( ActionBar.DISPLAY_SHOW_HOME );
+        return true;
+    }
 
 }

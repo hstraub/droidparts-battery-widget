@@ -35,12 +35,12 @@
 				<data android:mimeType="org.droidparts.battery_widget/widget" />
 			</intent-filter>
 		</activity>
-		
-		<activity android:name=".BatteryStatisticActivity"
+		<activity
+		    android:name=".BatteryStatisticActivity"
 		    android:label="Test Label"
-		    android:launchMode="singleTask" >
-			
-		    <intent-filter >
+		    android:launchMode="singleTask"
+			android:uiOptions="splitActionBarWhenNarrow" >
+			<intent-filter >
 		        <action android:name="android.intent.action.VIEW" />
 		        <category android:name="android.intent.category.LAUNCHER" />
 		    </intent-filter>
@@ -48,6 +48,6 @@
 
 	</application>
 
-	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="4" />
+	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="16" />
 
 </manifest> 

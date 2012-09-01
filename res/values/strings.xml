@@ -9,6 +9,7 @@
     <string name="txt_assigned_activity_descr">This activity will be launched when you tap the widget</string>
     <string name="txt_select_widget_design">Widget\'s style</string>
     <string name="btn_done">Done</string>
+    <string name="menu_settings">Settings</string>
     
     <string-array name="design_names">
     	<item>Classic</item> <!-- 0 -->
