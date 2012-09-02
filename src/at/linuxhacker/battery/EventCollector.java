@@ -22,7 +22,9 @@ import java.util.ArrayList;
 
 import org.droidparts.battery_widget.BatteryWidget;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.BatteryManager;
 import android.util.Log;
 import at.linuxhacker.notifications.NotificationScreenOverlayView;
@@ -37,13 +39,17 @@ public class EventCollector {
 	public String statusText = "leer";
 	public boolean batteryFull = false;
 	public boolean isCharging;
-	private ArrayList<ScreenStatusEvent> screenStatus = new ArrayList<ScreenStatusEvent>( );
+	private Context context = null;
+	private ArrayList<BatteryStatusEvent> batteryStatusEventList;
+	private ArrayList<ScreenStatusEvent> screenStatus = new ArrayList<ScreenStatusEvent>( ); // FIXME: rename and Timestamp to ms
 
 	NotificationScreenOverlayView mView = null;
 	private EventFilter eventFilter = null;
 
 	public EventCollector(Context context) {
 		this.eventFilter = new EventFilter( context );
+		this.batteryStatusEventList = new ArrayList<BatteryStatusEvent>(  );
+		this.context = context;
 		Log.d( BatteryWidget.TAG, "EventsTracer::Constructor" );
 	}
 
@@ -55,6 +61,8 @@ public class EventCollector {
 						+ ", mScreenOn=" + batteryStatus.isScreenOn( )
 						+ ", timestamp=" + batteryStatus.getTimestamp( ) );
 
+		this.batteryStatusEventList.add( batteryStatus );
+		this.flushDataToDb( ); // FIXME: only for testing!!
 		this.previousBatteryStatus = this.actualBatteryStatus;
 		this.actualBatteryStatus = batteryStatus;
 		if ( this.actualBatteryStatus == null
@@ -181,5 +189,32 @@ public class EventCollector {
 			}
 		}
 		return minutesToFull;
+	}
+	
+	public void flushDataToDb( ) {
+		int i;
+		int size = this.batteryStatusEventList.size( );
+		
+		if ( size == 0 ) {
+			return;
+		}
+		
+		DbHelper dbHelper = new DbHelper( this.context );
+		SQLiteDatabase db = dbHelper.getWritableDatabase( );
+		ContentValues contentValues = new ContentValues( );
+		
+		for ( i = 0; i < size; i++ ) {
+			contentValues.put( DbHelper.C_TIMESTAMP, this.batteryStatusEventList.get( i ).getTimestamp( ) );
+			contentValues.put( DbHelper.C_LEVEL, this.batteryStatusEventList.get( i ).getLevel( ) );
+			contentValues.put( DbHelper.C_PLUGGED, this.batteryStatusEventList.get( i ).getPlugged( ) );
+			contentValues.put( DbHelper.C_SCREEN_ON, this.batteryStatusEventList.get( i ).isScreenOn( ) );
+			contentValues.put( DbHelper.C_MINUTES_TO_FULL, this.batteryStatusEventList.get( i ).getMinutesToFull( ) );
+			
+			db.insert( DbHelper.T_BATTERY_EVENTS, null, contentValues );
+			contentValues.clear( );
+		}
+		
+		db.close( );
+		this.batteryStatusEventList.clear( );
 	}
 }
