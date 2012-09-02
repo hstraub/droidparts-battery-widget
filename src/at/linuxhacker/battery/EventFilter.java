@@ -93,7 +93,6 @@ public class EventFilter {
 
 		this.speakTextFilterd( text );
 		this.notificationDistributor.displayTextOnScreenOverlay( text );
-		Log.d( BatteryWidget.TAG, "jetzt rufe ich das scheissding auf" );
 		this.notificationDistributor.displaySystemNotification( text );
 	}
 

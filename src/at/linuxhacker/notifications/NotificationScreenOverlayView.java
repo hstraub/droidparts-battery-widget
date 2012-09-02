@@ -72,30 +72,22 @@ public class NotificationScreenOverlayView extends View {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Log.d( BatteryWidget.TAG, "BatteryInformationView::onAttachedToWindow" );
         mHandler.sendEmptyMessage(1);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        Log.d( BatteryWidget.TAG, "BatteryInformationView::onDetachedToWindow" );
         mHandler.removeMessages(1);
     }
     
     protected void updateDisplay() {
 		// TODO Auto-generated method stub
-    	Log.d( BatteryWidget.TAG, "BatteryInformationView::updateDisplay" );
     	invalidate( );
     }
 
 	@Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		Log.d( BatteryWidget.TAG, "BatteryInformationView::onMeasure"
-				+ " widthMeasureSpec=" + widthMeasureSpec
-				+ " heightMeasureSpec=" + heightMeasureSpec
-				+ " mNeededWidth=" + mNeededWidth
-				+ " mNeededHeight=" + mNeededHeight );
         setMeasuredDimension(resolveSize(mNeededWidth, widthMeasureSpec),
                 resolveSize(mNeededHeight, heightMeasureSpec));
     }
@@ -103,9 +95,6 @@ public class NotificationScreenOverlayView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d( BatteryWidget.TAG, "BatteryInformationView::onDraw"
-        		+ " Width=" + canvas.getWidth( )
-        		+ " Height=" + canvas.getHeight( ) );
         
         int x = ( canvas.getWidth( ) - ( this.textBounds.right - this.textBounds.left ) ) / 2;
         int y = ( canvas.getHeight( ) -( this.textBounds.bottom - this.textBounds.top ) ) / 2;
