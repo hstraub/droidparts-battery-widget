@@ -148,7 +148,13 @@ public class BatteryService extends Service {
 
 	@Override
 	public int onStartCommand( Intent intent, int flags, int startId ) {
-		Log.d( TAG, "BatteryService::onStartCommand" );
+		String logtext = "BatteryService::onStartCommand";
+		if ( intent != null ) {
+			logtext += ": component=" + intent.getComponent( );
+			logtext += " intentAction=" + intent.getAction( );
+			logtext += " categories=" + intent.getCategories( );
+		}
+		Log.d( TAG, logtext );
 		
 		if ( this.eventsTracer == null ) {
 			this.eventsTracer = new EventsTracer( this );
