@@ -37,7 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	public static final String C_SCREEN_ON = "screen_on";
 	public static final String C_LEVEL = "level";
 	public static final String C_MINUTES_TO_FULL = "minutes_to_full";
-	public static final String C_REPORT_FILE_NAME = null;
+	public static final String C_REPORT_FILE_NAME = "report_filename";
 	
 	public static final String C_LOAD_TYPE = "load_type";
 	public static final String C_MIN_RATE = "min_rate";
@@ -61,7 +61,6 @@ public class DbHelper extends SQLiteOpenHelper {
 				+ C_LEVEL + " integer, "
 				+ C_PLUGGED + " integer, "
 				+ C_SCREEN_ON + " integer, "
-				+ C_TIMESTAMP + " nummeric, "
 				+ C_MINUTES_TO_FULL + " integer )";
 		db.execSQL( sql );
 		
