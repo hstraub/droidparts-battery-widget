@@ -18,7 +18,6 @@ package at.linuxhacker.battery;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
@@ -59,6 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
 		String sql = "create table " + T_BATTERY_EVENTS + " ( "
 				+ C_TIMESTAMP + " integer primary key, " 
 				+ C_LEVEL + " integer, "
+				+ C_STATUS + " integer, "
 				+ C_PLUGGED + " integer, "
 				+ C_SCREEN_ON + " integer, "
 				+ C_MINUTES_TO_FULL + " integer )";

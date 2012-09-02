@@ -45,6 +45,15 @@ public class BatteryStatusEvent {
 		return timestamp;
 	}
 
+	public BatteryStatusEvent(long timestamp, int level, int status, 
+			int plugged, boolean screenOn) {
+		this.timestamp = timestamp;
+		this.level = level;
+		this.status = status;
+		this.plugged = plugged;
+		this.screenOn = screenOn;
+	}
+	
 	public BatteryStatusEvent(int level, int status, int plugged,
 			boolean screenOn) {
 		this.timestamp = System.currentTimeMillis( );

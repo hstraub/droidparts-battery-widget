@@ -16,10 +16,7 @@
 
 package at.linuxhacker.battery;
 
-import org.droidparts.battery_widget.BatteryWidget;
-
 import android.content.Context;
-import android.util.Log;
 import at.linuxhacker.notifications.NotificationDistributor;
 
 public class EventFilter {

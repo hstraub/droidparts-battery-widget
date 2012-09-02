@@ -24,6 +24,7 @@ import org.droidparts.battery_widget.BatteryWidget;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.BatteryManager;
 import android.util.Log;
@@ -34,22 +35,22 @@ public class EventCollector {
 	private BatteryStatusEvent actualBatteryStatus = null;
 	private BatteryStatusEvent previousBatteryStatus = null;
 	boolean isScreenOnFlag;
-	public boolean pluggedState = false;
-	public String statusText = "leer";
-	public boolean batteryFull = false;
-	private boolean isCharging;
+	public boolean pluggedState = false; // FIXME: notwendig?
+	// public String statusText = "leer"; FIXME: weg damit
+	// public boolean batteryFull = false; FIXME: weg damit
 	private Context context = null;
 	private ArrayList<BatteryStatusEvent> batteryStatusEventList;
-	private ArrayList<ScreenStatusEvent> screenStatusList = new ArrayList<ScreenStatusEvent>( ); // FIXME: rename and Timestamp to ms
+	private ArrayList<ScreenStatusEvent> screenStatusList = new ArrayList<ScreenStatusEvent>( );
 
 	NotificationScreenOverlayView mView = null;
 	private EventFilter eventFilter = null;
 
 	public EventCollector(Context context) {
+		Log.d( BatteryWidget.TAG, "EventsTracer::Constructor" );
 		this.eventFilter = new EventFilter( context );
 		this.batteryStatusEventList = new ArrayList<BatteryStatusEvent>(  );
 		this.context = context;
-		Log.d( BatteryWidget.TAG, "EventsTracer::Constructor" );
+		this.loadDbData( );
 	}
 
 	public void addBatteryChangedEvent( BatteryStatusEvent batteryStatus ) {
@@ -80,6 +81,7 @@ public class EventCollector {
 
 	public void addScreenOnEvent( ) {
 		this.screenStatusList.add( new ScreenStatusEvent( true ) );
+		this.isScreenOnFlag = true;
 
 		if ( this.actualBatteryStatus != null ) {
 			// yes, actualBatteryStatus could be null, after startup the widget
@@ -96,6 +98,7 @@ public class EventCollector {
 	}
 
 	public void addScreenOffEvent( ) {
+		this.isScreenOnFlag = false;
 		this.screenStatusList.add( new ScreenStatusEvent( false ) );
 		this.flushDataToDb( );
 	}
@@ -191,5 +194,39 @@ public class EventCollector {
 		
 		this.batteryStatusEventList.clear( );
 		this.screenStatusList.clear( );
+	}
+
+	private void loadDbData( ) {
+		String columns[] = { DbHelper.C_TIMESTAMP, DbHelper.C_LEVEL,
+				DbHelper.C_STATUS , DbHelper.C_PLUGGED, 
+				DbHelper.C_SCREEN_ON, DbHelper.C_MINUTES_TO_FULL }; 
+		DbHelper dbHelper = new DbHelper( this.context );
+		SQLiteDatabase db = dbHelper.getReadableDatabase( );
+		Cursor data = db.query( DbHelper.T_BATTERY_EVENTS, columns, null, null, null, null, DbHelper.C_TIMESTAMP + " desc" );
+		if ( data.moveToFirst( ) ) {
+			this.actualBatteryStatus = this.constructBatteryStatusEventFromCursorPosition ( data );
+			Log.d( BatteryWidget.TAG, "DB Read timestamp1=" + this.actualBatteryStatus.getTimestamp( ) );
+			
+		}
+
+		if ( data.moveToNext( ) ) {
+			this.previousBatteryStatus = this.constructBatteryStatusEventFromCursorPosition ( data );
+			Log.d( BatteryWidget.TAG, "DB Read timestamp2=" + this.previousBatteryStatus.getTimestamp( ) );
+		}
+		
+		data.close( );
+		db.close( );
+	}
+	
+	private BatteryStatusEvent constructBatteryStatusEventFromCursorPosition ( Cursor cursor ) {
+		BatteryStatusEvent event = new BatteryStatusEvent( 
+				cursor.getLong( 0 ),
+				cursor.getInt( 1 ),
+				cursor.getInt( 2 ),
+				cursor.getInt( 3 ),
+				cursor.getInt( 4 ) == 1 ? true : false );
+		event.setMinutesToFull( cursor.getInt( 5 ) );
+		
+		return event;
 	}
 }
