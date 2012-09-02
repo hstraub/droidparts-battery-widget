@@ -61,6 +61,9 @@ public class EventCollector {
 						+ ", timestamp=" + batteryStatus.getTimestamp( ) );
 
 		this.batteryStatusEventList.add( batteryStatus );
+		if ( ! this.isScreenOnFlag ) {
+			this.flushDataToDb( );
+		}
 		this.previousBatteryStatus = this.actualBatteryStatus;
 		this.actualBatteryStatus = batteryStatus;
 		if ( this.actualBatteryStatus == null
