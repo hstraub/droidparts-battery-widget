@@ -33,7 +33,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 import at.linuxhacker.battery.BatteryStatusEvent;
-import at.linuxhacker.battery.EventsTracer;
+import at.linuxhacker.battery.EventCollector;
 import at.linuxhacker.battery.LocalStorage;
 
 public class BatteryService extends Service {
@@ -41,7 +41,7 @@ public class BatteryService extends Service {
 	int mBatteryChargeLevel = -1; 
 	boolean mChargerConnected;
 	boolean mScreenOn = false;
-	EventsTracer eventsTracer = null;
+	EventCollector eventCollector = null;
 	LocalStorage localStorage = new LocalStorage( );
 
 	private ScreenStateService mScreenStateReceiver;
@@ -68,7 +68,7 @@ public class BatteryService extends Service {
 	
 				BatteryStatusEvent batteryStatus = new BatteryStatusEvent( level, status, plugged, BatteryService.this.mScreenOn );
 				try {
-					BatteryService.this.eventsTracer.addBatteryChangedEvent( batteryStatus );
+					BatteryService.this.eventCollector.addBatteryChangedEvent( batteryStatus );
 				} catch ( Exception e ) {
 					localStorage.writeExceptionLog( e );
 				}
@@ -92,7 +92,7 @@ public class BatteryService extends Service {
 				Log.d(TAG, "screen is ON");
 				BatteryService.this.mScreenOn = true; // FIXME
 				try {
-					BatteryService.this.eventsTracer.addScreenOnEvent( );
+					BatteryService.this.eventCollector.addScreenOnEvent( );
 				} catch ( Exception e ) {
 					localStorage.writeExceptionLog( e );
 				}
@@ -101,7 +101,7 @@ public class BatteryService extends Service {
 				Log.d(TAG, "screen is OFF");
 				BatteryService.this.mScreenOn = false; // FIXME: was ist damit
 				try {
-					BatteryService.this.eventsTracer.addScreenOffEvent( );
+					BatteryService.this.eventCollector.addScreenOffEvent( );
 				} catch ( Exception e ) {
 					localStorage.writeExceptionLog( e );
 				}
@@ -156,8 +156,8 @@ public class BatteryService extends Service {
 		}
 		Log.d( TAG, logtext );
 		
-		if ( this.eventsTracer == null ) {
-			this.eventsTracer = new EventsTracer( this );
+		if ( this.eventCollector == null ) {
+			this.eventCollector = new EventCollector( this );
 		}
 		
 		if (mScreenStateReceiver == null) {

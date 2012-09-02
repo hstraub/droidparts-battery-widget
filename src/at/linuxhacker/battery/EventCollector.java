@@ -27,7 +27,7 @@ import android.os.BatteryManager;
 import android.util.Log;
 import at.linuxhacker.notifications.NotificationScreenOverlayView;
 
-public class EventsTracer {
+public class EventCollector {
 
 	private BatteryStatusEvent actualBatteryStatus = null;
 	private BatteryStatusEvent previousBatteryStatus = null;
@@ -42,7 +42,7 @@ public class EventsTracer {
 	NotificationScreenOverlayView mView = null;
 	private EventFilter eventFilter = null;
 
-	public EventsTracer(Context context) {
+	public EventCollector(Context context) {
 		this.eventFilter = new EventFilter( context );
 		Log.d( BatteryWidget.TAG, "EventsTracer::Constructor" );
 	}
