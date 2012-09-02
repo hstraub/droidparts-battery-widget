@@ -19,11 +19,9 @@ package org.droidparts.battery_widget;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 public class BatteryStatisticActivity extends Activity {
 

@@ -17,7 +17,6 @@
 package at.linuxhacker.battery;
 
 import org.droidparts.battery_widget.BatteryWidget;
-import org.droidparts.battery_widget.BatteryWidgetActivity;
 
 import android.content.Context;
 import android.util.Log;

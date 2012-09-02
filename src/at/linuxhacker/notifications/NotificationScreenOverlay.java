@@ -23,7 +23,6 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
-import at.linuxhacker.battery.EventCollector;
 
 public class NotificationScreenOverlay {
 	private Context context = null;

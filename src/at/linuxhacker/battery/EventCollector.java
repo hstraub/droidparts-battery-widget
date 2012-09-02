@@ -37,7 +37,7 @@ public class EventCollector {
 	public boolean pluggedState = false;
 	public String statusText = "leer";
 	public boolean batteryFull = false;
-	public boolean isCharging;
+	private boolean isCharging;
 	private Context context = null;
 	private ArrayList<BatteryStatusEvent> batteryStatusEventList;
 	private ArrayList<ScreenStatusEvent> screenStatusList = new ArrayList<ScreenStatusEvent>( ); // FIXME: rename and Timestamp to ms
