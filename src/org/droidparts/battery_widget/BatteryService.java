@@ -178,6 +178,12 @@ public class BatteryService extends Service {
 		return START_STICKY;
 	}
 
+	@Override
+	public void onTaskRemoved( Intent rootIntent ) {
+		Log.d(TAG, "BatteryService::onTaskRemoved");
+		super.onTaskRemoved( rootIntent );
+	}
+
 	public void onDestroy() {
 		if (mScreenStateReceiver != null) {
 			mScreenStateReceiver.registerScreenReceiver(false, this);

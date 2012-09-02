@@ -55,4 +55,12 @@ public class BatteryWidgetProvider extends AppWidgetProvider {
 		Log.d(TAG, "BatteryWidgetProvider::onUpdate");
 		BatteryService.requestWidgetUpdate(context);
 	}
+
+	@Override
+	public void onDeleted( Context context, int[] appWidgetIds ) {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "BatteryWidgetProvider::onDeleted");
+		super.onDeleted( context, appWidgetIds );
+	}
+
 }
