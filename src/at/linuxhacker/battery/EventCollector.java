@@ -33,7 +33,6 @@ public class EventCollector {
 
 	private BatteryStatusEvent actualBatteryStatus = null;
 	private BatteryStatusEvent previousBatteryStatus = null;
-	private ChargeRate chargeRate;
 	boolean isScreenOnFlag;
 	public boolean pluggedState = false;
 	public String statusText = "leer";
@@ -70,7 +69,6 @@ public class EventCollector {
 			return;
 		}
 
-		this.calculateChargeRate( );
 		this.processBatteryStatusUpdate( );
 	}
 
@@ -99,48 +97,6 @@ public class EventCollector {
 	public void addScreenOffEvent( ) {
 		this.screenStatus.add( new ScreenStatusEvent( System
 				.currentTimeMillis( ) / 1000, false ) );
-	}
-
-	private void calculateChargeRate( ) {
-		if ( this.actualBatteryStatus.getStatus( ) == BatteryManager.BATTERY_STATUS_FULL ) {
-			this.isCharging = false;
-		} else if ( this.actualBatteryStatus.getStatus( ) == BatteryManager.BATTERY_STATUS_CHARGING ) {
-			this.isCharging = true;
-		}
-
-		if ( this.actualBatteryStatus.getStatus( ) == this.previousBatteryStatus
-				.getStatus( ) ) {
-			Log.d( TAG, "actualBatteryStatus: update" );
-			if ( this.chargeRate == null ) {
-				this.chargeRate = new ChargeRate(
-						this.actualBatteryStatus.getStatus( ) == BatteryManager.BATTERY_STATUS_DISCHARGING ? ChargeRate.TYPE_DISCHARGE
-								: ChargeRate.TYPE_CHARGE,
-						this.actualBatteryStatus.getTimestamp( ),
-						this.actualBatteryStatus.getLevel( ) );
-			} else {
-				this.chargeRate.updateChargeRate(
-						this.actualBatteryStatus.getTimestamp( ),
-						this.actualBatteryStatus.getLevel( ) );
-			}
-		} else if ( this.actualBatteryStatus.getStatus( ) == BatteryManager.BATTERY_STATUS_CHARGING ) {
-			Log.d( TAG, "updateBatteryStatus: new TYPE_CHARGE" );
-			this.chargeRate = new ChargeRate( ChargeRate.TYPE_CHARGE,
-					this.actualBatteryStatus.getTimestamp( ),
-					this.actualBatteryStatus.getLevel( ) );
-		} else if ( this.actualBatteryStatus.getStatus( ) == BatteryManager.BATTERY_STATUS_DISCHARGING ) {
-			Log.d( TAG, "updateBatteryStatus: new TYPE_DISCHARGE" );
-			this.chargeRate = new ChargeRate( ChargeRate.TYPE_DISCHARGE,
-					this.actualBatteryStatus.getTimestamp( ),
-					this.actualBatteryStatus.getLevel( ) );
-		}
-
-		Log.d( TAG, "updateBatteryStatus, chargeRate.valid="
-				+ this.chargeRate.valid );
-		if ( this.chargeRate.valid ) {
-			Log.d( TAG,
-					"Charge Rate: " + this.chargeRate.getChargeRatePerMinute( )
-							+ "% per Minute" );
-		}
 	}
 
 	public void processBatteryStatusUpdate( ) {
@@ -176,18 +132,14 @@ public class EventCollector {
 	private int calculateMinutesToFull( ) {
 		int minutesToFull = -1;
 
-		if ( this.chargeRate != null || this.chargeRate.valid ) {
+		if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_AC ) {
 			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
-					.getLevel( ) ) / this.chargeRate.getChargeRatePerMinute( ) );
-		} else {
-			if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_AC ) {
-				minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
-						.getLevel( ) ) / 0.8 );
-			} else if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_USB ) {
-				minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
-						.getLevel( ) ) / 0.27 );
-			}
+					.getLevel( ) ) / 0.8 );
+		} else if ( this.actualBatteryStatus.getPlugged( ) == BatteryManager.BATTERY_PLUGGED_USB ) {
+			minutesToFull = ( int ) ( ( float ) ( 100 - this.actualBatteryStatus
+					.getLevel( ) ) / 0.27 );
 		}
+
 		return minutesToFull;
 	}
 	
