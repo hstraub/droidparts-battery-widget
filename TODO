@@ -1,14 +1,10 @@
-* Package at.linuxhacker.battery
-
-- screenStatusArray Memory Cleanup
-- implementing ArrayList<BatteryStatus> batteryStatusList
+* Create Report + Notification, if the Charge Level reaches 100%
 
 * Package at.linuxhacker.notifications
 
 Implementation of:
 
 - NotificationToast
-- NotificationSystemNotification ( test-implemention done )
 
 * Multilanguage Support for Notifications:
 
