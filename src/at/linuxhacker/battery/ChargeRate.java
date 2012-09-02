@@ -55,7 +55,7 @@ public class ChargeRate {
 		chargeRate = ( ( float )  this.lastLevel - ( float ) this.firstLevel )
 				/
 				( ( float ) this.lastTimestamp - ( float ) this.firstTimestamp )
-				* 60.0f;
+				/ 1000f * 60.0f;
 		} catch ( Exception e ) {
 			chargeRate = 0;
 			Log.e( TAG, "getChargeRatePerMinute Exception: " + e );
