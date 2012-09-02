@@ -40,7 +40,7 @@ public class EventCollector {
 	public boolean isCharging;
 	private Context context = null;
 	private ArrayList<BatteryStatusEvent> batteryStatusEventList;
-	private ArrayList<ScreenStatusEvent> screenStatus = new ArrayList<ScreenStatusEvent>( ); // FIXME: rename and Timestamp to ms
+	private ArrayList<ScreenStatusEvent> screenStatusList = new ArrayList<ScreenStatusEvent>( ); // FIXME: rename and Timestamp to ms
 
 	NotificationScreenOverlayView mView = null;
 	private EventFilter eventFilter = null;
@@ -61,7 +61,6 @@ public class EventCollector {
 						+ ", timestamp=" + batteryStatus.getTimestamp( ) );
 
 		this.batteryStatusEventList.add( batteryStatus );
-		this.flushDataToDb( ); // FIXME: only for testing!!
 		this.previousBatteryStatus = this.actualBatteryStatus;
 		this.actualBatteryStatus = batteryStatus;
 		if ( this.actualBatteryStatus == null
@@ -77,8 +76,7 @@ public class EventCollector {
 	}
 
 	public void addScreenOnEvent( ) {
-		this.screenStatus.add( new ScreenStatusEvent( System
-				.currentTimeMillis( ) / 1000, true ) );
+		this.screenStatusList.add( new ScreenStatusEvent( true ) );
 
 		if ( this.actualBatteryStatus != null ) {
 			// yes, actualBatteryStatus could be null, after startup the widget
@@ -95,8 +93,8 @@ public class EventCollector {
 	}
 
 	public void addScreenOffEvent( ) {
-		this.screenStatus.add( new ScreenStatusEvent( System
-				.currentTimeMillis( ) / 1000, false ) );
+		this.screenStatusList.add( new ScreenStatusEvent( false ) );
+		this.flushDataToDb( );
 	}
 
 	public void processBatteryStatusUpdate( ) {
@@ -144,29 +142,51 @@ public class EventCollector {
 	}
 	
 	public void flushDataToDb( ) {
-		int i;
-		int size = this.batteryStatusEventList.size( );
-		
-		if ( size == 0 ) {
-			return;
-		}
+		int i, size;
 		
 		DbHelper dbHelper = new DbHelper( this.context );
 		SQLiteDatabase db = dbHelper.getWritableDatabase( );
 		ContentValues contentValues = new ContentValues( );
 		
-		for ( i = 0; i < size; i++ ) {
-			contentValues.put( DbHelper.C_TIMESTAMP, this.batteryStatusEventList.get( i ).getTimestamp( ) );
-			contentValues.put( DbHelper.C_LEVEL, this.batteryStatusEventList.get( i ).getLevel( ) );
-			contentValues.put( DbHelper.C_PLUGGED, this.batteryStatusEventList.get( i ).getPlugged( ) );
-			contentValues.put( DbHelper.C_SCREEN_ON, this.batteryStatusEventList.get( i ).isScreenOn( ) );
-			contentValues.put( DbHelper.C_MINUTES_TO_FULL, this.batteryStatusEventList.get( i ).getMinutesToFull( ) );
-			
-			db.insert( DbHelper.T_BATTERY_EVENTS, null, contentValues );
-			contentValues.clear( );
+		size = this.batteryStatusEventList.size( );
+		
+		if ( size != 0 ) {
+			for ( i = 0; i < size; i++ ) {
+				contentValues.clear( );
+				contentValues.put( DbHelper.C_TIMESTAMP,
+						this.batteryStatusEventList.get( i ).getTimestamp( ) );
+				contentValues.put( DbHelper.C_LEVEL,
+						this.batteryStatusEventList.get( i ).getLevel( ) );
+				contentValues.put( DbHelper.C_PLUGGED,
+						this.batteryStatusEventList.get( i ).getPlugged( ) );
+				contentValues.put( DbHelper.C_SCREEN_ON,
+						this.batteryStatusEventList.get( i ).isScreenOn( ) );
+				contentValues
+						.put( DbHelper.C_MINUTES_TO_FULL,
+								this.batteryStatusEventList.get( i )
+										.getMinutesToFull( ) );
+
+				db.insert( DbHelper.T_BATTERY_EVENTS, null, contentValues );
+			}
+		}
+		
+		size = this.screenStatusList.size( );
+		
+		if ( size != 0 ) {
+			for ( i = 0; i < size; i++ ) {
+				contentValues.clear( );
+				contentValues.put( DbHelper.C_TIMESTAMP,
+						this.screenStatusList.get( i ).getTimestamp( ) );
+				contentValues.put( DbHelper.C_SCREEN_ON,
+						this.screenStatusList.get( i ).isScreenOnFlag( ) );
+				
+				db.insert( DbHelper.T_SCREEN_EVENTS, null, contentValues );
+			}
 		}
 		
 		db.close( );
+		
 		this.batteryStatusEventList.clear( );
+		this.screenStatusList.clear( );
 	}
 }
