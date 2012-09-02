@@ -4,6 +4,7 @@
 	android:versionCode="20120826" android:sharedUserId="org.droidparts.battery_widget">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
 	<supports-screens android:largeScreens="true" android:anyDensity="true" />
 
