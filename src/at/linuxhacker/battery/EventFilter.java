@@ -80,7 +80,7 @@ public class EventFilter {
 		 * finished
 		 */
 
-		this.speakTextFilterd( text );
+		// FIXME: this.speakTextFilterd( text );
 		this.notificationDistributor.displayTextOnScreenOverlay( text );
 
 	}
@@ -88,7 +88,7 @@ public class EventFilter {
 	public void processScreenOnEventPluggedInState( int minutesToFull ) {
 		String text = "Ladezeit " + minutesToFull + " Minuten";
 
-		this.speakTextFilterd( text );
+		// FIXME: this.speakTextFilterd( text );
 		this.notificationDistributor.displayTextOnScreenOverlay( text );
 		this.notificationDistributor.displaySystemNotification( text );
 	}
