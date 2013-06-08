@@ -45,7 +45,7 @@ public class EventFilter {
 
 	public void processPowerPluggedOutEvent(
 			BatteryStatusEvent batteryStatusEvent ) {
-		if ( batteryStatusEvent.getLevel( ) != 100 ) {
+		if ( batteryStatusEvent.getLevel( ) < 99 ) {
 			String text = "Nicht vollständig aufgeladen. Ladestand "
 					+ batteryStatusEvent.getLevel( ) + "%";
 			this.speakTextUnfiltered( text );
