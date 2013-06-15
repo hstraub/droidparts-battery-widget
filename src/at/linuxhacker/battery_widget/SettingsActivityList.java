@@ -44,7 +44,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import at.linuxhacker.battery_widget2.R;
 
 public class SettingsActivityList extends ExpandableListActivity implements OnClickListener {
 

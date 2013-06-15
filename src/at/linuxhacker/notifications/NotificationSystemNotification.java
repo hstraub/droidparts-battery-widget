@@ -27,7 +27,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.linuxhacker.battery_widget.BatteryStatisticActivity;
 import at.linuxhacker.battery_widget.BatteryWidget;
-import at.linuxhacker.battery_widget2.R;
+import at.linuxhacker.battery_widget.R;
 
 public class NotificationSystemNotification {
 	private Context context = null;

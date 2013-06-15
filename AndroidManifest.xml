@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="at.linuxhacker.battery_widget2" android:versionName="1.0-hs-1"
-	android:versionCode="20120826" android:sharedUserId="at.linuxhacker.battery_widget2">
+	package="at.linuxhacker.battery_widget" android:versionName="1.1"
+	android:versionCode="20130615" android:sharedUserId="at.linuxhacker.battery_widget">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

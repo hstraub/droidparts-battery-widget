@@ -26,7 +26,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-import at.linuxhacker.battery_widget2.R;
 
 
 public class BatteryWidget {

@@ -37,7 +37,6 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import at.linuxhacker.battery_widget2.R;
 
 public class BatteryWidgetActivity extends Activity implements OnClickListener,
 		android.content.DialogInterface.OnClickListener, Runnable {

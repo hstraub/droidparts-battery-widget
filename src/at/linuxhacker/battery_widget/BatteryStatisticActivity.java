@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.webkit.WebView;
-import at.linuxhacker.battery_widget2.R;
 
 public class BatteryStatisticActivity extends Activity {
 
