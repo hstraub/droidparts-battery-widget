@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.droidparts.battery_widget;
+package at.linuxhacker.battery_widget;
 
-import static org.droidparts.battery_widget.BatteryWidget.DESIGN_AWFULLY_COOL;
-import static org.droidparts.battery_widget.BatteryWidget.PREFS;
-import static org.droidparts.battery_widget.BatteryWidget.PREF_ACTIVITY_NAME;
-import static org.droidparts.battery_widget.BatteryWidget.PREF_DESIGN_TYPE;
+import static at.linuxhacker.battery_widget.BatteryWidget.DESIGN_AWFULLY_COOL;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREFS;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREF_ACTIVITY_NAME;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREF_DESIGN_TYPE;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,6 +37,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import at.linuxhacker.battery_widget2.R;
 
 public class BatteryWidgetActivity extends Activity implements OnClickListener,
 		android.content.DialogInterface.OnClickListener, Runnable {

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.droidparts.battery_widget;
+package at.linuxhacker.battery_widget;
 
 import static android.content.Context.MODE_PRIVATE;
-import static org.droidparts.battery_widget.BatteryWidget.PREFS;
-import static org.droidparts.battery_widget.BatteryWidget.TAG;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREFS;
+import static at.linuxhacker.battery_widget.BatteryWidget.TAG;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -30,7 +30,7 @@ import android.util.Log;
 public class BatteryWidgetProvider extends AppWidgetProvider {
     
 	public static final String EXT_UPDATE_WIDGETS = "updateWidgets";
-	private static final String BATTERY_SERVICE_ACTION = "org.droidparts.battery_widget.BatteryService";
+	private static final String BATTERY_SERVICE_ACTION = "at.linuxhacker.battery_widget.BatteryService";
 	
 	public void onEnabled(Context context) {
 		Log.d(TAG, "BatteryWidgetProvider::onEnabled");

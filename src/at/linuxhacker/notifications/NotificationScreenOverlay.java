@@ -16,7 +16,7 @@
 
 package at.linuxhacker.notifications;
 
-import static org.droidparts.battery_widget.BatteryWidget.TAG;
+import static at.linuxhacker.battery_widget.BatteryWidget.TAG;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.CountDownTimer;

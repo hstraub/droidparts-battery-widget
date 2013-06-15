@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.droidparts.battery_widget;
+package at.linuxhacker.battery_widget;
 
 import static android.content.Context.MODE_PRIVATE;
 import android.app.PendingIntent;
@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import at.linuxhacker.battery_widget2.R;
 
 
 public class BatteryWidget {
@@ -43,7 +44,7 @@ public class BatteryWidget {
 	public static final int DESIGN_AWFULLY_COOL = 2;
 	public static final int DESIGN_DESIGN_COLORFULL = 3;
 
-    private static final String MIME = "org.droidparts.battery_widget/widget";
+    private static final String MIME = "at.linuxhacker.battery_widget/widget";
 	
 	public static void updateWidgets(Context context, int chargeLevel, boolean chargerConnected) {
 

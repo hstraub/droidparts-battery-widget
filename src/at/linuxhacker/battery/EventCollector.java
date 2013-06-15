@@ -16,11 +16,10 @@
 
 package at.linuxhacker.battery;
 
-import static org.droidparts.battery_widget.BatteryWidget.TAG;
+import static at.linuxhacker.battery_widget.BatteryWidget.TAG;
 
 import java.util.ArrayList;
 
-import org.droidparts.battery_widget.BatteryWidget;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,6 +27,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.BatteryManager;
 import android.util.Log;
+import at.linuxhacker.battery_widget.BatteryWidget;
 import at.linuxhacker.notifications.NotificationScreenOverlayView;
 
 public class EventCollector {

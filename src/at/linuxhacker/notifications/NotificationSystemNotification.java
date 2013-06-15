@@ -16,9 +16,6 @@
 
 package at.linuxhacker.notifications;
 
-import org.droidparts.battery_widget.BatteryStatisticActivity;
-import org.droidparts.battery_widget.BatteryWidget;
-import org.droidparts.battery_widget.R;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -28,6 +25,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import at.linuxhacker.battery_widget.BatteryStatisticActivity;
+import at.linuxhacker.battery_widget.BatteryWidget;
+import at.linuxhacker.battery_widget2.R;
 
 public class NotificationSystemNotification {
 	private Context context = null;

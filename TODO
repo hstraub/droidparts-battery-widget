@@ -1,3 +1,9 @@
+License file:
+- create
+- add license Terms and Copyright Onwers
+- add Launcher Icon Copyright
+- Launcher Icon from: http://www.iconarchive.com/show/delta-icons-by-aroche/Battery-icon.html
+
 * Create Report + Notification, if the Charge Level reaches 100%
 
 * Package at.linuxhacker.notifications

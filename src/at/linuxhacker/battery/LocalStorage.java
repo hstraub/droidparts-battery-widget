@@ -21,10 +21,10 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.droidparts.battery_widget.BatteryWidget;
 
 import android.os.Environment;
 import android.util.Log;
+import at.linuxhacker.battery_widget.BatteryWidget;
 
 /*
  * Idea: 

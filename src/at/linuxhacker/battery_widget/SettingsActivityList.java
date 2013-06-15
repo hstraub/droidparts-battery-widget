@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.droidparts.battery_widget;
+package at.linuxhacker.battery_widget;
 
-import static org.droidparts.battery_widget.BatteryWidget.PREFS;
-import static org.droidparts.battery_widget.BatteryWidget.PREF_ACTIVITY_NAME;
-import static org.droidparts.battery_widget.BatteryWidget.PREF_CLASS_NAME;
-import static org.droidparts.battery_widget.BatteryWidget.PREF_PACKAGE_NAME;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREFS;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREF_ACTIVITY_NAME;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREF_CLASS_NAME;
+import static at.linuxhacker.battery_widget.BatteryWidget.PREF_PACKAGE_NAME;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +44,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import at.linuxhacker.battery_widget2.R;
 
 public class SettingsActivityList extends ExpandableListActivity implements OnClickListener {
 

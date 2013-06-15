@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package org.droidparts.battery_widget;
+package at.linuxhacker.battery_widget;
 
-import static org.droidparts.battery_widget.BatteryWidget.TAG;
-import static org.droidparts.battery_widget.BatteryWidgetProvider.EXT_UPDATE_WIDGETS;
+import static at.linuxhacker.battery_widget.BatteryWidget.TAG;
+import static at.linuxhacker.battery_widget.BatteryWidgetProvider.EXT_UPDATE_WIDGETS;
 
 import java.lang.reflect.Field;
 import android.app.Service;

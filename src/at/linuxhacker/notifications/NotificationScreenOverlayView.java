@@ -16,7 +16,6 @@
 
 package at.linuxhacker.notifications;
 
-import org.droidparts.battery_widget.BatteryWidget;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -26,6 +25,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import at.linuxhacker.battery_widget.BatteryWidget;
 
 
 public class NotificationScreenOverlayView extends View {
