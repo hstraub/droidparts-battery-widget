@@ -1,6 +1,13 @@
 BattaryWidget
 
-This is a fork. Main reason for this project:
+This is a fork. New functions:
 
-- learning Android
-- Smartphone should speak, if the battery is full :-)
+  * Display battery charge level as overlay.
+  * Text to speach: battery full charge message.
+  * Store display on and off events
+  * Store charge and discharge events
+  
+ToDo:
+
+  * Battery status activity
+  * Battery statistics
